@@ -2,9 +2,7 @@ package com.collinewait.me.model;
 
 import com.github.slugify.Slugify;
 
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 public class CourseIdea {
     private String slug;
@@ -29,6 +27,10 @@ public class CourseIdea {
     }
 
     public String getSlug() { return slug; }
+
+    public List<String> getVoters() {
+        return new ArrayList<>(voters);
+    }
 
     public boolean addVoter(String voterUserName) {
         return voters.add(voterUserName);
