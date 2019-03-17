@@ -2,6 +2,7 @@ package com.collinewait.me;
 
 import com.collinewait.me.model.CourseIdea;
 import com.collinewait.me.model.CourseIdeaDAO;
+import com.collinewait.me.model.NotFoundException;
 import com.collinewait.me.model.SimpleCourseIdeaDAO;
 import spark.ModelAndView;
 import spark.template.handlebars.HandlebarsTemplateEngine;
@@ -71,6 +72,14 @@ public class Main {
             idea.addVoter(req.attribute("username"));
             res.redirect("/ideas");
             return null;
+        });
+
+        exception(NotFoundException.class, (exc, req, res) -> {
+            res.status(404);
+            HandlebarsTemplateEngine engine = new HandlebarsTemplateEngine();
+            String html = engine.render(
+               new ModelAndView(null, "not-found.hbs"));
+            res.body(html);
         });
     }
 }
