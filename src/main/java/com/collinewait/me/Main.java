@@ -1,5 +1,6 @@
 package com.collinewait.me;
 
+import com.collinewait.me.model.CourseIdea;
 import com.collinewait.me.model.CourseIdeaDAO;
 import com.collinewait.me.model.SimpleCourseIdeaDAO;
 import spark.ModelAndView;
@@ -20,6 +21,7 @@ public class Main {
             model.put("username", req.cookie("username"));
             return new ModelAndView(model, "index.hbs");
                 }, new HandlebarsTemplateEngine());
+
         post("/sign-in", (req, res) ->  {
             Map<String, String> model = new HashMap<>();
             String username = req.queryParams("username");
@@ -27,5 +29,23 @@ public class Main {
             model.put("username", username);
             return new ModelAndView(model, "sign-in.hbs");
         }, new HandlebarsTemplateEngine());
+
+        get("/ideas", (req, res) ->  {
+            Map<String, Object> model = new HashMap<>();
+            model.put("ideas", dao.findAll());
+            return new ModelAndView(model, "ideas.hbs");
+        }, new HandlebarsTemplateEngine());
+
+        post("/ideas", (req, res) ->  {
+            String title = req.queryParams("title");
+            //TODO: cw - This username is tied to the cookie implementation
+            CourseIdea courseIdea = new CourseIdea(title,
+                    req.cookie("username"));
+            dao.add(courseIdea);
+            res.redirect("/ideas");
+            return null;
+        });
+
+
     }
 }
