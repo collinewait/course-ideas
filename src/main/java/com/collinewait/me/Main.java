@@ -16,6 +16,14 @@ public class Main {
         staticFileLocation("/public");
         CourseIdeaDAO dao = new SimpleCourseIdeaDAO();
 
+        before("/ideas", (req, res) -> {
+            //TODO: cw - send message about redirect
+            if (req.cookie("username") == null) {
+                res.redirect("/");
+                halt();
+            }
+        });
+
         get("/", (req, res) ->  {
             Map<String, String> model = new HashMap<>();
             model.put("username", req.cookie("username"));
